@@ -1,0 +1,16 @@
+CREATE TABLE `proyecto_pw2bd`.`personas` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NOT NULL,
+  `apellido_paterno` VARCHAR(45) NOT NULL,
+  `apellido_materno` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `numero_tel` INT(10) NOT NULL,
+  `direccion_per` VARCHAR(45) NOT NULL,
+  `ciudad` VARCHAR(45) NOT NULL,
+  `codigo_postal` INT(5) NOT NULL,
+  `fecha_registro` DATETIME NOT NULL,
+  `edad` INT(2) NOT NULL,
+  `genero` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  UNIQUE INDEX `numero_tel_UNIQUE` (`numero_tel` ASC) VISIBLE);

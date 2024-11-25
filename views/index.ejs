@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto de Programacion web 2</title>
+</head>
+<body>
+    <h1>Lista de usuarios</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th>Email</th>
+            <th>Numero</th>
+            <th>Direccion</th>
+            <th>Ciudad</th>
+            <th>CP</th>
+            <th>Fecha</th>
+            <th>Edad</th>
+            <th>Genero</th>
+        </tr>
+        <% users.forEach(user => { %>
+            <tr>
+                <td><%= user.id %></td>
+                <td><%= user.nombre %></td>
+                <td><%= user.apellido_paterno %></td> 
+                <td><%= user.apellido_materno %></td> 
+                <td><%= user.email %></td> 
+                <td><%= user.numero_tel %></td> 
+                <td><%= user.direccion_per %></td> 
+                <td><%= user.ciudad %></td> 
+                <td><%= user.codigo_postal %></td> 
+                <td><%= user.fecha_registro %></td> 
+                <td><%= user.edad %></td> 
+                <td><%= user.genero %></td> 
+                <td>
+                    <a href="/edit/<%= user.id %>">Editar</a> |
+                    <a href="/delete/<%= user.id %>">Eliminar</a>
+                </td>
+            </tr>
+            <% }); %>
+        </table>
+    
+        <h2>Agregar Nuevo Usuario</h2>
+        <form action="/add" method="POST">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Agregar</button>
+        </form>
+    </table>   
+</body>
+</html>
