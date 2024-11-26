@@ -11,11 +11,11 @@ app.set('view engine','ejs');
 
 // Conexion a la base de datos 
 const db = mysql.createConnection({
-    host: '3306',
+    host: 'localhost',
     user: 'root',
     password: 'xdxd',
     database: 'proyecto_pw2bd',
-    port: 3019
+    port: 3306
 });
 
 
@@ -49,6 +49,11 @@ app.get('/', (req, res) => {
     });
 });
 
+// Ruta para mostrar el formulario de creación de usuario 
+app.get('/creaUser', (req, res) => {
+     res.render('creaUser');
+});
+
 //Agregar usuarios 
 
 app.post('/add', (req, res) => {
@@ -64,16 +69,29 @@ app.post('/add', (req, res) => {
     });
 });
 
+// Mostrar el formulario de edición del usuario 
+app.get('/edit/:id', (req, res) => {
+     const { id } = req.params; 
+     const query = 'SELECT id, nombre, apellido_paterno, apellido_materno, email, numero_tel, direccion_per, ciudad, codigo_postal, fecha_registro, edad, genero FROM personas WHERE id = ?'; 
+     db.query(query, [nombre, apellido_paterno, apellido_materno, email, numero_tel, direccion_per, ciudad, codigo_postal, fecha_registro, edad, genero,id], (err, results) => { 
+        if (err) { console.error('Error fetching user:', err); 
+            res.send('Error'); 
+        } else {
+                 res.render('edit', { user: results[0] }); } 
+});
+});
+
+
 //editar usuario
 app.get('/edit/:id', (req, res) => {
     const { id } = req.params;
-    const query = 'SELECT id, nombre, apellido_paterno, apellido_materno, email, numero_tel, direccion_per, ciudad, codigo_postal, fecha_registro, edad, genero FROM personas WHERE id = ?';
-    db.query(query, [id], (err, results) => {
+    const query = 'UPDATE personas SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, email = ?, numero_tel = ?, direccion_per = ?, ciudad = ?, codigo_postal = ?, fecha_registro = ?, edad = ?, genero = ? WHERE id = ?'
+    db.query(query, [nombre, apellido_paterno, apellido_materno, email, numero_tel, direccion_per, ciudad, codigo_postal, fecha_registro, edad, genero,id], (err, results) => {
         if (err) {
             console.error('Error fetching user:', err);
             res.send('Error');
         } else {
-            res.render('edit', { user: results[0] });
+            res.redirect('/');
         }
     });
 });
