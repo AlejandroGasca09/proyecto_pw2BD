@@ -49,11 +49,6 @@ app.get('/', (req, res) => {
     });
 });
 
-// Ruta para mostrar el formulario de creación de usuario 
-app.get('/creaUser', (req, res) => {
-     res.render('creaUser');
-});
-
 //Agregar usuarios 
 
 app.post('/add', (req, res) => {
@@ -69,22 +64,16 @@ app.post('/add', (req, res) => {
     });
 });
 
-// Mostrar el formulario de edición del usuario 
-app.get('/edit/:id', (req, res) => {
-     const { id } = req.params; 
-     const query = 'SELECT id, nombre, apellido_paterno, apellido_materno, email, numero_tel, direccion_per, ciudad, codigo_postal, fecha_registro, edad, genero FROM personas WHERE id = ?'; 
-     db.query(query, [nombre, apellido_paterno, apellido_materno, email, numero_tel, direccion_per, ciudad, codigo_postal, fecha_registro, edad, genero,id], (err, results) => { 
-        if (err) { console.error('Error fetching user:', err); 
-            res.send('Error'); 
-        } else {
-                 res.render('edit', { user: results[0] }); } 
+// Mostrar formulario para agregar nuevo usuario
+app.get('/creaUser', (req, res) => {
+    res.render('creaUser');
 });
-});
-
 
 //editar usuario
+/*
 app.get('/edit/:id', (req, res) => {
     const { id } = req.params;
+    const {nombre,apellido_paterno,apellido_materno,email,numero_tel,direccion_per,ciudad,codigo_postal,fecha_registro,edad,genero} = req.body;
     const query = 'UPDATE personas SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, email = ?, numero_tel = ?, direccion_per = ?, ciudad = ?, codigo_postal = ?, fecha_registro = ?, edad = ?, genero = ? WHERE id = ?'
     db.query(query, [nombre, apellido_paterno, apellido_materno, email, numero_tel, direccion_per, ciudad, codigo_postal, fecha_registro, edad, genero,id], (err, results) => {
         if (err) {
@@ -95,6 +84,44 @@ app.get('/edit/:id', (req, res) => {
         }
     });
 });
+*/
+// Ruta GET para mostrar el formulario de edición con los datos del usuario
+app.get('/edit/:id', (req, res) => {
+    const { id } = req.params;  
+    const query = 'SELECT * FROM personas WHERE id = ?';
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            console.error('Error fetching user:', err);  
+            res.send('Error');
+        } else {
+            const user = results[0]; 
+            res.render('edit', { user });
+        }
+    });
+});
+// Ruta POST para manejar la actualización de los datos del usuario
+app.post('/edit/:id', (req, res) => {
+    const { id } = req.params;
+    const { nombre, apellido_paterno, apellido_materno, email, numero_tel, direccion_per, ciudad, codigo_postal, fecha_registro, edad, genero } = req.body;
+    const query = 'UPDATE personas SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, email = ?, numero_tel = ?, direccion_per = ?, ciudad = ?, codigo_postal = ?, fecha_registro = ?, edad = ?, genero = ? WHERE id = ?';
+    db.query(query, [nombre, apellido_paterno, apellido_materno, email, numero_tel, direccion_per, ciudad, codigo_postal, fecha_registro, edad, genero, id], (err, results) => {
+        if (err) {
+            console.error('Error updating user:', err);
+            return res.send('Error');
+        }
+        const selectQuery = 'SELECT * FROM personas';
+        db.query(selectQuery, (err, users) => {
+            if (err) {
+                console.error('Error fetching users:', err);
+                return res.send('Error');
+            }else{
+                res.redirect('/');
+            }
+        });
+    });
+});
+
+
 
 //eliminar usuario
 app.get('/delete/:id', (req, res) => {
